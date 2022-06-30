@@ -1,20 +1,21 @@
 from django.db import models
 from scrapping.utils import from_cyrillic_to_eng
 
+
 # Create your models here.
 class City(models.Model):
     """
     create table BD
     """
-    #python manage.py makemigrations
-    #python manage.py migrate
+    # python manage.py makemigrations
+    # python manage.py migrate
     name = models.CharField(max_length=50,
-                            verbose_name='name city',unique=True)
-    slug = models.CharField(max_length=50, blank=True,unique=True)
+                            verbose_name='name city', unique=True)
+    slug = models.CharField(max_length=50, blank=True, unique=True)
 
     class Meta:
         verbose_name = 'city name'
-        verbose_name_plural ='city names'
+        verbose_name_plural = 'city names'
 
     def __str__(self):
         return self.name
@@ -27,8 +28,8 @@ class City(models.Model):
 
 class language(models.Model):
     """
-       create table BD
-       """
+    create table BD
+    """
     # python manage.py makemigrations
     # python manage.py migrate
     name = models.CharField(max_length=50,
@@ -47,3 +48,20 @@ class language(models.Model):
             self.slug = from_cyrillic_to_eng(str(self.name))
             super().save(*args, **kwargs)
 
+
+class Vacancy(models.Model):
+    url = models.URLField(unique=True)
+    title = models.CharField(max_length=300, verbose_name='Title')
+    company = models.CharField(max_length=100, verbose_name='Company')
+    description = models.TextField(verbose_name='Description')
+
+    city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='City')
+    language = models.ForeignKey('language', on_delete=models.CASCADE, verbose_name='language')
+    timestamp = models.DateField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'vacancy'
+        verbose_name_plural = 'vacancies'
+
+    def __str__(self):
+        return self.title
