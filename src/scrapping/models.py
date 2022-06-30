@@ -1,4 +1,5 @@
 from django.db import models
+from scrapping.utils import from_cyrillic_to_eng
 
 # Create your models here.
 class City(models.Model):
@@ -18,6 +19,12 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if self.slug == '':
+            self.slug = from_cyrillic_to_eng(str(self.name))
+            super().save(*args, **kwargs)
+
+
 class language(models.Model):
     """
        create table BD
@@ -34,3 +41,9 @@ class language(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.slug == '':
+            self.slug = from_cyrillic_to_eng(str(self.name))
+            super().save(*args, **kwargs)
+
