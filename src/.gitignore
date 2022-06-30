@@ -104,6 +104,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+/src/scrapping/migrations/
 
 # mkdocs documentation
 /site
@@ -135,5 +136,6 @@ GitHub.sublime-settings
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+/scrapping/migrations/
 /scrapping/migrations/
 /scrapping/migrations/
