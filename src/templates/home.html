@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block title %}Home page{% endblock %}
+
 {% block content %}
       {% for obj in object_list %}
         <p><a href="{{obj.url}}" target="_blank">link</a> Title: {{obj.title}}</p>
