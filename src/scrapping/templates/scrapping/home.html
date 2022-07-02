@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Home page{% endblock %}
+
+{% block content %}
+      {% for obj in object_list %}
+<!--      https://getbootstrap.com/docs/4.4/components/card/-->
+        <div class="card my-2">
+            <div class="card-header">
+                <a href="{{obj.url}}" target="_blank">link</a> Title: {{obj.title}}
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{obj.description}}</p>
+            </div>
+        </div>
+      {% endfor %}
+{% endblock %}
+

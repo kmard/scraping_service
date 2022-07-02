@@ -3,7 +3,8 @@ import datetime
 
 
 def home(request):
-    date = datetime.datetime.now().date()
-    name = 'Dave'
-    _context = {'date':date,'name':name}
+    # date = datetime.datetime.now().date()
+    # name = 'Dave'
+    # _context = {'date':date,'name':name}
+    _context = {}
     return  render(request,'home.html',_context)

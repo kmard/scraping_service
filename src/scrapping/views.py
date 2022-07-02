@@ -4,4 +4,4 @@ from .models import Vacancy
 # Create your views here.
 def home_view(request):
     qs = Vacancy.objects.all()
-    return render(request,'home.html',{'object_list':qs})
+    return render(request,'scrapping/home.html',{'object_list':qs})
