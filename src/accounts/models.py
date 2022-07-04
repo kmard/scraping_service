@@ -1,10 +1,40 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import UserManager
 from django.db import models
 
 # https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#a-full-example
 # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
 # Create your models here.
+
+class MyUserManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email))
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.create_user(
+            email,
+            password=password)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
 class MyUser(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -14,18 +44,18 @@ class MyUser(AbstractBaseUser):
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    city = models.ForeignKey('City',
+    city = models.ForeignKey('scrapping.City',
                              on_delete=models.SET_NULL,
                              null=True,
                              blank=True)
-    language = models.ForeignKey('language',
+    language = models.ForeignKey('scrapping.language',
                                  on_delete=models.SET_NULL,
                                  null=True,
                                  blank=True)
 
     send_email = models.BooleanField(default=True)
 
-    objects = UserManager()
+    objects = MyUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
