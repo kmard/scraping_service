@@ -10,11 +10,28 @@
                 <a href="{{obj.url}}" target="_blank">link</a> Title: {{obj.title}}
             </div>
             <div class="card-body">
+                <h4>{{obj.company}}</h4>
                 <p class="card-text">{{obj.description}}</p>
                 <p>{{obj.city.name}} | {{obj.language.name}} |
                     <small>{{obj.timestamp}}</small></p>
             </div>
         </div>
+      {% empty %}
+         <h3>Data is not present</h3>
       {% endfor %}
+<!--    <form action="https://www.google.com/search">-->
+<!--POST {% csrf_token %}-->
+
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <form method="GET" action="">
+                    <div class="form-group">
+                        {{form.as_p}}
+                        <button type="submit" value="Find" class="btn btn-primary">Find</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 {% endblock %}
 
