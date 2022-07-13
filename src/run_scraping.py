@@ -4,7 +4,7 @@ import codecs
 import os, sys
 # import datetime as dt
 #
-# from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 from django.db import DatabaseError
 
 proj = os.path.dirname(os.path.abspath('manage.py'))
@@ -15,29 +15,57 @@ import django
 django.setup()
 #
 from scrapping.parsers import *
-from scrapping.models import Vacancy,City,language,Error
-#
-# User = get_user_model()
-#
+from scrapping.models import Vacancy,City,language,Error,url
+
+User = get_user_model()
+
 parsers = (
-    (work, 'https://www.work.ua/ru/jobs-python/'),
-    (dou, 'https://jobs.dou.ua/vacancies/?category=Python'),
-    (djinni, 'https://djinni.co/jobs/keyword-python/'),
-    (rabota, 'https://rabota.ua/ua/zapros/python-programmer/%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D0%B0')
+    (work, 'work'),
+    (dou, 'dou'),
+    (djinni, 'djinni'),
+    (rabota, 'rabota')
 )
 
-city = City.objects.filter(slug='kiev').first()
-language = language.objects.filter(slug='piton').first()
+def get_settings():
+    qs = User.objects.filter(send_email=True).values()
+    settings_lst = set((q['city_id'], q['language_id']) for q in qs)
+    return settings_lst
+
+def get_urls(_settings):
+    qs = url.objects.all().values()
+    url_dict = {(q['city_id'], q['language_id']): q['url_data'] for q in qs}
+    urls = []
+    for pair in _settings:
+        if pair in url_dict:
+            tmp = {}
+            tmp['city'] = pair[0]
+            tmp['language'] = pair[1]
+            url_data = url_dict.get(pair)
+            if url_data:
+                tmp['url_data'] = url_dict.get(pair)
+                urls.append(tmp)
+    return urls
+
+settings = get_settings()
+url_list = get_urls(settings)
+
+
+
+# city = City.objects.filter(slug='kiev').first()
+# language = language.objects.filter(slug='piton').first()
 
 jobs, errors = [], []
 
-for func,url  in parsers:
-    j, e = func(url)
-    jobs+=j
-    errors+=e
+for data in url_list:
+
+    for func,key  in parsers:
+        url = data['url_data'][key]
+        j, e = func(url,city = data['city'],language = data['language'])
+        jobs+=j
+        errors+=e
 
 for job in jobs:
-    v = Vacancy(**job,city = city,language = language)
+    v = Vacancy(**job)
     try:
         v.save()
     except DatabaseError:
@@ -47,37 +75,7 @@ if errors:
     er = Error(data = errors).save()
 
 
-# with open('work.txt', 'w', encoding='utf-8') as file:
-#    # file.write(str(input('Enter some thing ....')))
-#    # [file.write(str(i.items())) for i in jobs]
-#    # file.write('\n')
-#     for i in jobs:
-#        for key,val in i.items():
-#            # print(key,val)
-#            file.write(key+':'+val.strip())
 
-#
-#
-# def get_settings():
-#     qs = User.objects.filter(send_email=True).values()
-#     settings_lst = set((q['city_id'], q['language_id']) for q in qs)
-#     return settings_lst
-#
-#
-# def get_urls(_settings):
-#     qs = Url.objects.all().values()
-#     url_dict = {(q['city_id'], q['language_id']): q['url_data'] for q in qs}
-#     urls = []
-#     for pair in _settings:
-#         if pair in url_dict:
-#             tmp = {}
-#             tmp['city'] = pair[0]
-#             tmp['language'] = pair[1]
-#             url_data = url_dict.get(pair)
-#             if url_data:
-#                 tmp['url_data'] = url_dict.get(pair)
-#                 urls.append(tmp)
-#     return urls
 #
 #
 # async def main(value):

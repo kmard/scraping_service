@@ -1,5 +1,4 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import UserManager
 from django.db import models
 
 # https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#a-full-example

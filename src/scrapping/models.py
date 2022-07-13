@@ -63,6 +63,7 @@ class Vacancy(models.Model):
     class Meta:
         verbose_name = 'vacancy'
         verbose_name_plural = 'vacancies'
+        ordering = ['-timestamp']
 
     def __str__(self):
         return self.title
@@ -73,4 +74,22 @@ class Error(models.Model):
 
     # def __str__(self):
     #     return self.title
+    
+def default_url():
+    return {'work':'https://www.work.ua/ru/jobs-python/',
+            'rabota':'https://rabota.ua/ua/zapros/python-programmer/%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D0%B0',
+            'dou':'https://jobs.dou.ua/vacancies/?category=Python',
+            'djinni':'https://djinni.co/jobs/keyword-python/'}
 
+
+class url(models.Model):
+        
+    city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='City')
+    language = models.ForeignKey('language', on_delete=models.CASCADE, verbose_name='language')
+    url_data = jsonfield.JSONField(default=default_url)
+
+    class Meta:
+       unique_together = ('city','language')
+       
+    
+    
