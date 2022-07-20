@@ -14,7 +14,8 @@ def list_view(request):
 
     city = request.GET.get('city')
     language = request.GET.get('language')
-    page_obj = []
+
+    context ={'city':city,'language':language,'form':form}
     if city or language:
         _filter = {}
         if city:
@@ -28,8 +29,5 @@ def list_view(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-    else:
-        page_obj = Vacancy.objects.all()
-
-    return render(request,'scrapping/list.html',{'object_list':page_obj,
-                                                 'form':form})
+        context['object_list'] = page_obj
+    return render(request,'scrapping/list.html',context)
