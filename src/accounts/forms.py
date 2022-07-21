@@ -17,7 +17,7 @@ class UserLoginForm(forms.Form):
 
         if email and password:
             qs = User.objects.filter(email=email)
-            if not qs.exsists():
+            if not qs.exists():
                 raise forms.ValidationError('User is not defined !')
 
             if not check_password(password,qs[0].password):

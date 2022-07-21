@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}login page{% endblock %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h4 class="my-2">Form auth</h4>
+        <form method="POST" action=""> {% csrf_token %}
+            <div class="form-group">
+                {{form.as_p}}
+                <button type="submit" value="Find" class="btn btn-primary">Enter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+

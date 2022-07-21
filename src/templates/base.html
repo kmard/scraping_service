@@ -27,9 +27,15 @@
                   <li class="nav-item">
                       <a class="nav-link" href="#">Features</a>
                   </li>
+                  {% if user.is_authenticated %}
                   <li class="nav-item">
-                      <a class="nav-link" href="#">Pricing</a>
+                      <a class="nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
                   </li>
+                  {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'accounts:login' %}">Log In</a>
+                  </li>
+                  {% endif %}
                   <li class="nav-item">
                       <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                   </li>
