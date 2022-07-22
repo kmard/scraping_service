@@ -29,4 +29,23 @@ class UserLoginForm(forms.Form):
 
             return super(UserLoginForm,self).clean(*args,**kwargs)
 
+class UserRegistrationForm(forms.ModelForm):
+    email = forms.CharField(label='enter email',
+        widget=forms.EmailInput(attrs={'class':'form-comtrol'}))
+    password = forms.CharField(label='enter password',
+        widget=forms.PasswordInput(attrs={'class':'form-comtrol'}))
+    password2 = forms.CharField(label='repeat password',
+        widget=forms.PasswordInput(attrs={'class': 'form-comtrol'}))
+
+    class Meta:
+        model = User
+        fields = ('email',)
+
+    def clean_password2(self):
+        data = self.cleaned_data
+        if data['password'] != data['password2']:
+            raise forms.ValidationError('Passwords are different!')
+        else:
+            return data['password2']
+
 
