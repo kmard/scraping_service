@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h4 class="my-2">Form registration</h4>
+        <form method="POST" action=""> {% csrf_token %}
+            <div class="form-group">
+                {{form.as_p}}
+                <button type="submit" value="Find" class="btn btn-primary">Registration</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
