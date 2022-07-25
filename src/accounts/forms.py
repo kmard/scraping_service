@@ -1,9 +1,10 @@
 
 # https://docs.djangoproject.com/en/3.0/topics/auth/default/
-
 from django import forms
 from django.contrib.auth import get_user_model,authenticate
 from django.contrib.auth.hashers import check_password
+from scrapping.models import language,City
+
 
 User = get_user_model()
 
@@ -48,4 +49,25 @@ class UserRegistrationForm(forms.ModelForm):
         else:
             return data['password2']
 
+class UserUpdateForm(forms.Form):
+    city = forms.ModelChoiceField(queryset=City.objects.all(),
+                                  to_field_name='slug',
+                                  required=True,
+                                  widget=forms.Select(attrs={'class':'form-control'}),
+                                  label='City'
+                                  )
+    language = forms.ModelChoiceField(queryset=language.objects.all(),
+                                      to_field_name='slug',
+                                      required=True,
+                                      widget=forms.Select(attrs={'class': 'form-control'}),
+                                      label='Program language'
+                                      )
 
+    send_email = forms.BooleanField(required=False,
+                                    widget=forms.CheckboxInput,
+                                    label='Send email')
+
+
+    class Meta:
+        model = User
+        fields = ('city','language','send_email')

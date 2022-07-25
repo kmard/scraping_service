@@ -1,9 +1,8 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
-# https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#a-full-example
-# https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
-# Create your models here.
+from scrapping.models import City,language
+
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -15,7 +14,8 @@ class MyUserManager(BaseUserManager):
             raise ValueError('Users must have an email address')
 
         user = self.model(
-            email=self.normalize_email(email))
+            email=self.normalize_email(email)
+        )
 
         user.set_password(password)
         user.save(using=self._db)
@@ -28,7 +28,8 @@ class MyUserManager(BaseUserManager):
         """
         user = self.create_user(
             email,
-            password=password)
+            password=password
+        )
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -40,18 +41,12 @@ class MyUser(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    city = models.ForeignKey('scrapping.City',
-                             on_delete=models.SET_NULL,
-                             null=True,
-                             blank=True)
-    language = models.ForeignKey('scrapping.language',
-                                 on_delete=models.SET_NULL,
-                                 null=True,
-                                 blank=True)
-
+    city = models.ForeignKey(City, on_delete=models.SET_NULL,
+                             null=True, blank=True)
+    language = models.ForeignKey(language, on_delete=models.SET_NULL,
+                                 null=True, blank=True)
     send_email = models.BooleanField(default=True)
 
     objects = MyUserManager()
