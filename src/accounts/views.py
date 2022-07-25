@@ -35,11 +35,19 @@ def update_view(request):
         user = request.user
         if request.method == 'POST':
             form = UserUpdateForm(request.POST)
-        else:
-            form = UserUpdateForm(
-                initial={'city':user.city,
-                         'language':user.language,
-                         'send_email':user.send_email})
-            return render(request, 'accounts/update.html', {'form': form})
+            if form.is_valid():
+                date = form.cleaned_data
+                user.city = date['city']
+                user.language = date['language']
+                user.send_email = date.get('send_email')
+                user.save()
+                return redirect('accounts:update')
+
+
+        form = UserUpdateForm(
+            initial={'city':user.city,
+                     'language':user.language,
+                     'send_email':user.send_email})
+        return render(request, 'accounts/update.html', {'form': form})
     else:
         return redirect('accounts:login')
