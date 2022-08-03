@@ -2,6 +2,7 @@ import asyncio #multiprosessing/multithreading
 import os, sys
 from django.contrib.auth import get_user_model
 from django.db import DatabaseError
+import datetime as dt
 
 proj = os.path.dirname(os.path.abspath('manage.py'))
 sys.path.append(proj)
@@ -71,13 +72,13 @@ for job in jobs:
         v.save()
     except DatabaseError:
         pass
-# if errors:
-#     qs = Error.objects.filter(timestamp=dt.date.today())
-#     if qs.exists():
-#         err = qs.first()
-#         err.data.update({'errors': errors})
-#         err.save()
-#     else:
-#         er = Error(data=f'errors:{errors}').save()
+    if errors:
+        qs = Error.objects.filter(timestamp=dt.date.today())
+        if qs.exists():
+            err = qs.first()
+            err.data.update({'errors': errors})
+            err.save()
+        else:
+            er = Error(data=f'errors:{errors}').save()
 
 

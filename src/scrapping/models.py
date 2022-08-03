@@ -72,8 +72,8 @@ class Error(models.Model):
     timestamp = models.DateField(auto_now_add=True)
     data = jsonfield.JSONField()
 
-    # def __str__(self):
-    #     return self.title
+    def __str__(self):
+        return str(self.timestamp)
     
 def default_url():
     return {'work':'https://www.work.ua/ru/jobs-python/',

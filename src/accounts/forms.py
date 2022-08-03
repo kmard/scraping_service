@@ -71,3 +71,7 @@ class UserUpdateForm(forms.Form):
     class Meta:
         model = User
         fields = ('city','language','send_email')
+
+    class ContactForm(forms.Form):
+        pass
+
