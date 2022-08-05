@@ -20,6 +20,19 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <p class="my-2">Form for requare add city and language</p>
+        <form method="POST" action="{% url 'accounts:contact' %}"> {% csrf_token %}
+            <div class="form-group">
+                {{contact_Form.as_p}}
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
 {% endblock content %}
 
 
