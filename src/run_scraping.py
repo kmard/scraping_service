@@ -82,3 +82,5 @@ for job in jobs:
             er = Error(data=f'errors:{errors}').save()
 
 
+ten_days_ago = dt.date.today() - dt.timedelta(10)
+# Vacancy.objects.filter(timestamp__lte = ten_days_ago).delete()
