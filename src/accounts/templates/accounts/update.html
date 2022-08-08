@@ -22,14 +22,23 @@
 
 <div class="row">
     <div class="col-md-8 mx-auto">
-        <p class="my-2">Form for requare add city and language</p>
-        <form method="POST" action="{% url 'accounts:contact' %}"> {% csrf_token %}
-            <div class="form-group">
-                {{contact_Form.as_p}}
-                <button type="submit" class="btn btn-primary">Send</button>
+        <p class="my-2">Request form for adding a new city and language</p>
+<!-- https://getbootstrap.com/docs/4.4/components/collapse/       -->
+            <p>
+              <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsed" aria-expanded="false" aria-controls="collapseExample">
+                Show form request
+              </button>
+            </p>
+            <div class="collapse" id="collapsed">
+              <div class="card card-body">
+                 <form method="POST" action="{% url 'accounts:contact' %}"> {% csrf_token %}
+                    <div class="form-group">
+                        {{contact_Form.as_p}}
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                 </form>
+              </div>
             </div>
-        </form>
-
     </div>
 </div>
 
